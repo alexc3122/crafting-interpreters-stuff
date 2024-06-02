@@ -75,17 +75,31 @@ int main(int argc, char *argv[])
     str = malloc(64);
     strcpy(str, "second string!");
     retval = list_search(list, str);
-    printf("search for \"%s\" -- count is: %d\n", str, retval);
+    printf("called list_search() for \"%s\" -- count is: %d\n", str, retval);
     free(str);
     str = NULL;
 
-    printf("calling list_get() with index 3\n");
     str = list_get(list, 3);
-    printf("string at list[3]: %s\n", str);
+    printf("called list_get() @ index=3. string: %s\n", str);
 
-    printf("calling list_remove() with index 0\n");
+    str = malloc(64);
+    strcpy(str, "second string!");
+    printf("calling list_update with str=\"%s\" and index=%d\n", str, 1);
+    str = list_update(list, str, 1);
+    printf("  previously stored string:\"%s\"\n", str);
+    free(str);
+    str = NULL;
+    print_strings(list);
+
+    str = malloc(64);
+    strcpy(str, "second string!");
+    retval = list_search(list, str);
+    printf("called list_search() for \"%s\" -- count is: %d\n", str, retval);
+    free(str);
+    str = NULL;
+
     str = list_remove(list, 0);
-    printf("string removed from list at list[0]:\n  %s\n", str);
+    printf("called list_remove() with index=0. string: %s\n", str);
     print_strings(list);
     free(str);
     str = NULL;
