@@ -4,22 +4,6 @@
 #include "libstringlist.c"
 
 
-void print_strings(string_list *list)
-{
-    char *str = NULL;
-    int i = 0;
-
-    printf("  printing strings\n");
-
-    for (i = 0; i < list->list_length; i++)
-    {
-        str = list_get(list, i);
-        printf("    %d: %s\n", i, str);
-    }
-
-    printf("  done priting strings.\n\n");
-}
-
 int main(int argc, char *argv[])
 {    
     string_list *list = NULL;
@@ -35,42 +19,42 @@ int main(int argc, char *argv[])
     printf("calling list_insert() with \"%s\" @ at index 0\n", str);
     retval = list_insert(list, str, 0);
     printf("retval: %d\n", retval);
-    print_strings(list);
+    list_print(list);
 
     str = malloc(64);
     strcpy(str, "second string!");
     printf("calling list_push() with \"%s\"\n", str);
     retval = list_push(list, str);
     printf("retval: %d\n", retval);
-    print_strings(list);
+    list_print(list);
 
     str = malloc(64);
     strcpy(str, "third string.");
     printf("calling list_push() with \"%s\"\n", str);
     retval = list_push(list, str);
     printf("retval: %d\n", retval);
-    print_strings(list);
+    list_print(list);
 
     str = malloc(64);
     strcpy(str, "fourth? string");
     printf("calling list_insert() with \"%s\" @ at index 1\n", str);
     retval = list_insert(list, str, 1);
     printf("retval: %d\n", retval);
-    print_strings(list);
+    list_print(list);
 
     str = malloc(64);
     strcpy(str, "abcd");
     printf("calling list_push() with \"%s\"\n", str);
     retval = list_push(list, str);
     printf("retval: %d\n", retval);
-    print_strings(list);;
+    list_print(list);;
 
     str = malloc(64);
     strcpy(str, "abcde");
     printf("calling list_push() with \"%s\"\n", str);
     retval = list_push(list, str);
     printf("retval: %d\n", retval);
-    print_strings(list);;
+    list_print(list);;
 
     str = malloc(64);
     strcpy(str, "second string!");
@@ -89,7 +73,7 @@ int main(int argc, char *argv[])
     printf("  previously stored string:\"%s\"\n", str);
     free(str);
     str = NULL;
-    print_strings(list);
+    list_print(list);
 
     str = malloc(64);
     strcpy(str, "second string!");
@@ -100,7 +84,7 @@ int main(int argc, char *argv[])
 
     str = list_remove(list, 0);
     printf("called list_remove() with index=0. string: %s\n", str);
-    print_strings(list);
+    list_print(list);
     free(str);
     str = NULL;
 
@@ -109,16 +93,11 @@ int main(int argc, char *argv[])
     printf("calling list_insert() with \"%s\" @ at index 0\n", str);
     retval = list_insert(list, str, 0);
     printf("retval: %d\n", retval);
-    print_strings(list);
+    list_print(list);
 
     printf("now deleting the list\n");
-    while(list->list_length)
-    {
-        str = list_pop(list);
-        free(str);
-        str = NULL;
-    }
-    print_strings(list);
+    list_empty(list);
+    list_print(list);
 
     free(list);
     list = NULL;

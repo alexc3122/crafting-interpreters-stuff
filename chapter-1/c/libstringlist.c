@@ -7,24 +7,36 @@ int list_add(string_list *list, char *str)
     return list_push(list, str);
 }
 
+// Empty the list of all strings contained in it.
+void list_empty(string_list *list)
+{
+    if (!list)
+        return;
+
+    while(list->length)
+    {
+        free(list_pop(list));
+    }
+}
+
 // Gets a string at the specified index from the list.
 char* list_get(string_list *list, int index)
 {
     struct node_t *node = NULL;
     unsigned int i = 0;
 
-    // Basic sanity checks to ensure index is non-negative and in bounds of the list.
-    if (index < 0)
+    // Basic sanity checks
+    if (!list)
         return NULL;
 
-    if (index >= list->list_length)
+    if (index < 0 || index >= list->length)
         return NULL;
 
     // Iterate over the linked list now.
     node = list->root_node.next;
     i = 0;
 
-    while (i < list->list_length && i != index)
+    while (i < list->length && i != index)
     {
         node = node->next;
         i++;
@@ -41,17 +53,17 @@ int list_insert(string_list *list, char *str, int index)
     unsigned int i = 0;
 
     // Basic sanity checks
-    if (index < 0)
+    if (!list || !str)
         return -1;
 
-    // Strictly 'greater than' comparision here. No 'greater than or equals'.
-    // If index == list_length, then you're just doing an add to the end of the list.
-    if (index > list->list_length)
+    // 'greater than' comparision here. No 'greater than or equals'.
+    // If index == length, then you're just doing an add to the end of the list.
+    if (index < 0 || index > list->length)
         return -1;
 
     new_node = malloc(sizeof(struct node_t));
 
-    if (new_node == NULL)
+    if (!new_node)
         return -1;
 
     memset(new_node, 0, sizeof(struct node_t));
@@ -59,7 +71,7 @@ int list_insert(string_list *list, char *str, int index)
     new_node->str = str;
 
     // edge case: adding to an empty list
-    if (list->list_length == 0)
+    if (list->length == 0)
     {
         new_node->next = &(list->root_node);
         new_node->prev = &(list->root_node);
@@ -67,7 +79,7 @@ int list_insert(string_list *list, char *str, int index)
         list->root_node.next = new_node;
         list->root_node.prev = new_node;
 
-        list->list_length++;
+        list->length++;
         return 0;
     }
 
@@ -75,7 +87,7 @@ int list_insert(string_list *list, char *str, int index)
     node = list->root_node.next;
     i = 0;
 
-    while (i < list->list_length && i != index)
+    while (i < list->length && i != index)
     {
         node = node->next;
         i++;
@@ -93,7 +105,7 @@ int list_insert(string_list *list, char *str, int index)
     // fix the pointer on the current node to point back to the new node
     node->prev = new_node;
 
-    list->list_length++;
+    list->length++;
     return i;
 }
 
@@ -104,8 +116,11 @@ char* list_pop(string_list *list)
     struct node_t *last_node = NULL;
     char *str = NULL;
 
+    if (!list)
+        return NULL;
+
     // nothing to return
-    if (list->list_length == 0)
+    if (list->length == 0)
         return NULL;
 
     root_node = &(list->root_node);
@@ -114,7 +129,7 @@ char* list_pop(string_list *list)
 
     // edge case: removing the last item in the list requires handling the
     // pointers a slight bit differently
-    if (list->list_length == 1)
+    if (list->length == 1)
     {
         root_node->next = NULL;
         root_node->prev = NULL;
@@ -130,10 +145,29 @@ char* list_pop(string_list *list)
     
     free(last_node);
     last_node = NULL;
-    list->list_length--;
+    list->length--;
 
     return str;
 }
+
+// Print out the list
+void list_print(string_list *list)
+{
+    int i = 0;
+
+    if (!list)
+        return;
+
+    printf("=== length: %i\n", list->length);
+
+    for (i = 0; i < list->length; i++)
+    {
+        printf("  %i: %s\n", i, list_get(list, i));
+    }
+
+    puts("===");
+}
+
 
 // Adds an element to the end of the list.
 int list_push(string_list *list, char *str)
@@ -141,9 +175,12 @@ int list_push(string_list *list, char *str)
     struct node_t *root_node = &(list->root_node);
     struct node_t *new_node = NULL;
 
+    if (!list || !str)
+        return -1;
+
     new_node = malloc(sizeof(struct node_t));
 
-    if (new_node == NULL)
+    if (!new_node)
         return -1;
 
     memset(new_node, 0, sizeof(struct node_t));
@@ -152,7 +189,7 @@ int list_push(string_list *list, char *str)
     new_node->str = str;
 
     // edge case: if the list is empty, then there are no previous nodes to link to
-    if (list->list_length == 0)
+    if (list->length == 0)
     {
         new_node->next = root_node;
         new_node->prev = root_node;
@@ -175,9 +212,9 @@ int list_push(string_list *list, char *str)
         root_node->prev = new_node;
     }
 
-    list->list_length++;
+    list->length++;
 
-    return list->list_length-1;
+    return list->length-1;
 }
 
 // Removes a string from the list at the given index.
@@ -188,19 +225,18 @@ char* list_remove(string_list *list, int index)
     unsigned int i = 0;
 
     // Basic sanity checks
-    if (index < 0)
+    if (!list)
         return NULL;
 
-    // 'greater than or equal' check, because if index == list_length, that is out-of-bounds and
-    // off-by-one
-    if (index >= list->list_length)
+    // 'greater than or equal', because if index == length, that is out-of-bounds and off-by-one
+    if (index < 0 || index >= list->length)
         return NULL;
 
     // Iterate over the linked list now.
     node = list->root_node.next;
     i = 0;
 
-    while (i < list->list_length && i != index)
+    while (i < list->length && i != index)
     {
         node = node->next;
         i++;
@@ -211,7 +247,7 @@ char* list_remove(string_list *list, int index)
     // fix the pointers in the list now
 
     // special case: removing the last item requires we reset pointers on the root node.
-    if (list->list_length == 1)
+    if (list->length == 1)
     {
         list->root_node.next = NULL;
         list->root_node.prev = NULL;
@@ -227,7 +263,7 @@ char* list_remove(string_list *list, int index)
 
     free(node);
     node = NULL;
-    list->list_length--;
+    list->length--;
 
     return str;
 }
@@ -240,12 +276,12 @@ int list_search(string_list *list, char *needle)
     int count = 0;
     int i = 0;
 
-    if (needle == NULL)
+    if (!list || !needle)
         return 0;
 
     node = &(list->root_node);
 
-    for (i = 0; i < list->list_length; i++)
+    for (i = 0; i < list->length; i++)
     {
         node = node->next;
 
@@ -263,18 +299,18 @@ char* list_update(string_list *list, char *str, int index)
     char *old_string = NULL;
     unsigned int i = 0;
 
-    // Basic sanity checks to ensure index is non-negative and in bounds of the list.
-    if (index < 0)
+    if (!list || !str)
         return NULL;
 
-    if (index >= list->list_length)
+    // Basic sanity checks to ensure index is non-negative and in bounds of the list.
+    if (index < 0 || index >= list->length)
         return NULL;
 
     // iterate over the linked list now
     node = list->root_node.next;
     i = 0;
 
-    while (i < list->list_length && i != index)
+    while (i < list->length && i != index)
     {
         node = node->next;
         i++;

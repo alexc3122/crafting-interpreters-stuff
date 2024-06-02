@@ -14,14 +14,21 @@ struct node_t {
  */
 typedef struct string_list {
     struct node_t root_node;
-    unsigned int list_length;
+    unsigned int length;
 } string_list;
 
 
 /**
  * Alias of list_push()
  */
-int add(string_list *list, char *str);
+int list_add(string_list *list, char *str);
+
+/**
+ * Empties the list list of all strings in it. Strings that were previously in 
+ * the list are deallocated/freed.
+ * @param list  The list object to empty/free.
+ */
+void list_empty(string_list *list);
 
 /**
  * Gets a string at the specified index from the list.
@@ -48,6 +55,12 @@ int list_insert(string_list *list, char *str, int index);
  * @return The string that is taken from the list
  */
 char* list_pop(string_list *list);
+
+/**
+ * Pretty prints the list of strings;
+ * @param list  The list to print
+ */
+void list_print(string_list *list);
 
 /**
  * Adds an element to the end of the list.
