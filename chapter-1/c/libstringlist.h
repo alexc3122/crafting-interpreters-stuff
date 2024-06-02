@@ -9,7 +9,8 @@ struct node_t {
 };
 
 /**
- * List object type definition. This doubly-linked list implementation is circular.
+ * List object type definition. This implementation of doubly-linked list is 
+ * circular.
  */
 typedef struct string_list {
     struct node_t root_node;
@@ -73,3 +74,15 @@ char* list_remove(string_list *list, int index);
  * @return The number of times a string was found in the list.
  */
 int list_search(string_list *list, char *needle);
+
+/**
+ * Updates the entry in the string list with a different string. This function 
+ * does not deallocated/free the previously stored string in the list. Instead,
+ * it is update to perform the clean-up. For that reason, the function returns
+ * a pointer to the previously stored string.
+ * @param list  The list to update
+ * @param str   string pointer to update the list entry with
+ * @param index The index where to update the stored string.
+ * @return The pointer to the previously stored string.
+ */
+char* list_update(string_list *list, char *str, int index);

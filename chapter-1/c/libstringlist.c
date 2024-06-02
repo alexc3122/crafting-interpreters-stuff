@@ -255,3 +255,33 @@ int list_search(string_list *list, char *needle)
 
     return count;
 }
+
+// Updates the node at the specified index with a new/different string passed in.
+char* list_update(string_list *list, char *str, int index)
+{
+    struct node_t *node = NULL;
+    char *old_string = NULL;
+    unsigned int i = 0;
+
+    // Basic sanity checks to ensure index is non-negative and in bounds of the list.
+    if (index < 0)
+        return NULL;
+
+    if (index >= list->list_length)
+        return NULL;
+
+    // iterate over the linked list now
+    node = list->root_node.next;
+    i = 0;
+
+    while (i < list->list_length && i != index)
+    {
+        node = node->next;
+        i++;
+    }
+
+    old_string = node->str;
+    node->str = str;
+
+    return old_string;
+}
