@@ -54,6 +54,8 @@ int list_insert(string_list *list, char *str, int index)
     if (new_node == NULL)
         return -1;
 
+    memset(new_node, 0, sizeof(struct node_t));
+
     new_node->str = str;
 
     // edge case: adding to an empty list
@@ -143,6 +145,8 @@ int list_push(string_list *list, char *str)
 
     if (new_node == NULL)
         return -1;
+
+    memset(new_node, 0, sizeof(struct node_t));
 
     // node allocated -- set the string pointer
     new_node->str = str;

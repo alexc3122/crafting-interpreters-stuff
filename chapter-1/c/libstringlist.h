@@ -1,21 +1,18 @@
 
 /**
- *  Basic structure of a doubly linked list node
+ *  Basic structure of a doubly linked list node.
  */
-typedef struct node_t {
+struct node_t {
     struct node_t *prev;
     struct node_t *next;
     char *str;
 };
 
 /**
- * List object type definition.
+ * List object type definition. This doubly-linked list implementation is circular.
  */
 typedef struct string_list {
-    // This implementation will be circular.
     struct node_t root_node;
-
-    // Self-explainitory
     unsigned int list_length;
 } string_list;
 
