@@ -46,15 +46,15 @@ int list_insert(string_list *list, char *str, int index);
  * Removes the last string from the list and returns the pointer to the 
  * string. Returns NULL if the list is empty or if the pointer provided to 
  * the list addition function was NULL.
- * @param list The list object to pop from.
+ * @param list  The list object to pop from.
  * @return The string that is taken from the list
  */
 char* list_pop(string_list *list);
 
 /**
  * Adds an element to the end of the list.
- * @param list the list object to add to.
- * @param str string pointer to add to the list.
+ * @param list  the list object to add to.
+ * @param str   string pointer to add to the list.
  * @return the index of the added element. Returns -1 if the string could not
  *         be added to the list.
  */
@@ -62,7 +62,7 @@ int list_push(string_list *list, char *str);
 
 /**
  * Removes a string from the list at the given index.
- * @param list The list to remove the string from
+ * @param list  The list to remove the string from
  * @param index The index in the list to remove.
  * @return Returns a pointer to the removed string, or NULL if removal failed.
  */
