@@ -1,9 +1,9 @@
-CFLAGS= -g -O0 -fno-stack-protector -fsanitize=address
+CFLAGS ?= -g -O0 -fsanitize=address -fno-omit-frame-pointer -fno-stack-protector
 
 all: challenge_bin
 
 challenge_bin: challenge.o
-	cc $(CFLAGS) -o challenge_bin challenge.o
+	$(CC) $(CFLAGS) -o challenge_bin challenge.o
 
 clean:
-	rm -f libstringlist.o challenge.o challenge_bin
+	rm -f challenge.o challenge_bin
