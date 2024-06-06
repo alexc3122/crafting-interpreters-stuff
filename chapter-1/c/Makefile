@@ -1,9 +1,14 @@
-CFLAGS ?= -g -O0 -fsanitize=address -fno-omit-frame-pointer -fno-stack-protector
+ALL = challenge_bin
+all: $(ALL)
 
-all: challenge_bin
+ARTIFACTS = *.o
+
+clean:
+	rm -rf $(ARTIFACTS)
 
 challenge_bin: challenge.o
 	$(CC) $(CFLAGS) -o challenge_bin challenge.o
+ARTIFACTS += challenge_bin
 
-clean:
-	rm -f challenge.o challenge_bin
+asan: all
+asan: CFLAGS += -g -fsanitize=address -fno-omit-frame-pointer -fno-stack-protector -O0
