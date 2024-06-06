@@ -1,3 +1,4 @@
+#pragma once
 
 /**
  *  Basic structure of a doubly linked list node.
