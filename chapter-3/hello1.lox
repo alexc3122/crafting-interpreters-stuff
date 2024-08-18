@@ -1,0 +1,65 @@
+print "Hello world!";
+
+class Pet
+{
+	init(name, noise, food)
+	{
+		this.name = name;
+		this.noise = noise;
+		this.food = food;
+	}
+
+	makeNoise()
+	{
+		print this.name + " goes " + this.noise + ".";
+	}
+
+	feed(food)
+	{
+		if (this.food == food)
+		{
+			print "Yum! You fed " + this.name + " " + food + ", and they like it.";
+		}
+		else
+		{
+			print "Yuck! " + this.name + " doesn't eat " + food + ".";
+		}
+	}
+}
+
+
+class Cat < Pet
+{
+	init(name)
+	{
+		super.init(name, "Meow", "tuna");
+	}
+}
+
+class Dog < Pet
+{
+	init(name)
+	{
+		super.init(name, "Woof", "bacon");
+	}
+}
+
+var bob = Cat("Bob");
+
+bob.feed("cheese");
+bob.feed("tuna");
+bob.makeNoise();
+
+var tiny = Dog("Tiny");
+tiny.feed("carrots");
+tiny.feed("bacon"); 
+tiny.makeNoise();
+
+
+// This doesn't work.
+//var pets = [bob, tiny];
+
+for (var i = 0; i < 2; i = i + 1)
+{
+	//pets[i].makeNoise();
+}
